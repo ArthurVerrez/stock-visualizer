@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Card,
   CardContent,
@@ -23,6 +24,7 @@ const results = Array.from({ length: 20 }, (_, i) => ({
   name: `company${i}`,
   ticker: `ticker${i}`,
   description: `I am a description for company${i}`,
+  image: "https://github.com/ArthurVerrez.png",
 }))
 
 export function SearchResults({ className, ...props }: SearchResults) {
@@ -33,8 +35,16 @@ export function SearchResults({ className, ...props }: SearchResults) {
         <>
           <Card>
             <CardHeader key={result["name"]}>
-              <CardTitle>{result["name"]}</CardTitle>
-              <CardDescription>{result["ticker"]}</CardDescription>
+              <div className="flex items-center space-x-4">
+                <Avatar>
+                  <AvatarImage src={result["image"]} />
+                  <AvatarFallback>{result["ticker"]}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <CardTitle>{result["name"]}</CardTitle>
+                  <CardDescription>{result["ticker"]}</CardDescription>
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
               <CardDescription>{result["description"]}</CardDescription>
