@@ -7,7 +7,7 @@
     "baseColor": "slate",
     "cssVariables": true
   },
-  "rsc": false,
+  "rsc": true,
   "aliases": {
     "utils": "@/lib/utils",
     "components": "@/components"

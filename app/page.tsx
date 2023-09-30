@@ -1,5 +1,3 @@
-"use client"
-
 import Link from "next/link"
 import {
   CalendarIcon,
@@ -23,6 +21,8 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@/components/ui/command"
+import { MainSearch } from "@/components/main-search"
+import { SearchResults } from "@/components/search-results"
 
 export default function IndexPage() {
   return (
@@ -33,26 +33,10 @@ export default function IndexPage() {
         </h1>
       </div>
       <div className="flex w-full gap-4 md:w-1/2">
-        <Command className="rounded-lg border shadow-md">
-          <CommandInput placeholder="Type a company name or ticker..." />
-          <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
-            <CommandGroup heading="Suggestions">
-              <CommandItem>
-                <BsMicrosoft className="mr-2 h-4 w-4" />
-                <span>Microsoft (MSFT)</span>
-              </CommandItem>
-              <CommandItem>
-                <BsGoogle className="mr-2 h-4 w-4" />
-                <span>Google (GOOG)</span>
-              </CommandItem>
-              <CommandItem>
-                <BsApple className="mr-2 h-4 w-4" />
-                <span>Apple (AAPL)</span>
-              </CommandItem>
-            </CommandGroup>
-          </CommandList>
-        </Command>
+        <MainSearch className="w-full" />
+      </div>
+      <div className="flex w-full gap-4 md:w-1/2">
+        <SearchResults className="w-full" />
       </div>
     </section>
   )
