@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "sed -i '8,9s/^/#/' node_modules/yahoo-finance2/dist/esm/src/env-node.js && next build",
+    "build": "sed -i '8,9d' node_modules/yahoo-finance2/dist/esm/src/env-node.js && next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
