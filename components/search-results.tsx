@@ -42,22 +42,13 @@ export function SearchResults({
       <h4 className="mb-4 text-sm font-medium leading-none">Results</h4>
       {resultItems.map((item) => (
         <div key={item["ticker"]}>
-          <Card>
+          <Card className="cursor-pointer">
             <CardHeader>
-              <div className="flex items-center space-x-4">
-                <Avatar>
-                  <AvatarImage src={item["image"]} />
-                  <AvatarFallback>{item["ticker"]}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <CardTitle>{item["name"]}</CardTitle>
-                  <CardDescription>{item["ticker"]}</CardDescription>
-                </div>
+              <div>
+                <CardTitle>{item["ticker"]}</CardTitle>
+                <CardDescription>{item["name"]}</CardDescription>
               </div>
             </CardHeader>
-            <CardContent>
-              <CardDescription>{item["description"]}</CardDescription>
-            </CardContent>
           </Card>
           <div className="my-2" />
         </div>

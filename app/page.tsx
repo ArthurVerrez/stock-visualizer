@@ -9,23 +9,25 @@ export default function IndexPage() {
   const [loading, setLoading] = useState(false)
   const [results, setResults] = useState<any[]>([])
 
-  const exampleResults = Array.from({ length: 5 }, (_, i) => ({
-    name: `company${i}`,
-    ticker: `ticker${i}`,
-    description: `I am a description for company${i}`,
-    image: "https://github.com/ArthurVerrez.png",
-  }))
-
   const [searched, setSearched] = useState(false)
+  const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/yfinance`
 
-  const handleSubmit = (event: React.SyntheticEvent) => {
+  const handleSubmit = async (event: React.SyntheticEvent, value: string) => {
     event.preventDefault()
     setSearched(true)
     setLoading(true)
-    setTimeout(() => {
-      setResults(exampleResults)
+    try {
+      const response = await fetch(`${apiUrl}?search=${value}`)
+      if (!response.ok) {
+        throw new Error("Network response was not ok")
+      }
+      const data = await response.json()
+      setResults(data.results)
+    } catch (error) {
+      console.error("Fetch failed: ", error)
+    } finally {
       setLoading(false)
-    }, 1000)
+    }
   }
 
   return (

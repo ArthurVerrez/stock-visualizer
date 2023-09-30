@@ -9,9 +9,12 @@ interface MainSearchProps extends React.HTMLAttributes<HTMLFormElement> {
   submitCallback: (event: React.SyntheticEvent, value: string) => void
 }
 
-export function MainSearch({ className, ...props }: MainSearchProps) {
+export function MainSearch({
+  className,
+  submitCallback,
+  ...props
+}: MainSearchProps) {
   const [value, setValue] = useState("")
-  const submitCallback = props.submitCallback
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value)
   }
