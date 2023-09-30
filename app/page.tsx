@@ -27,12 +27,12 @@ import {
 export default function IndexPage() {
   return (
     <section className="container mx-auto flex flex-col items-center justify-center gap-6 pb-8 pt-6 md:py-10">
-      <div className="flex w-1/2 max-w-[980px] flex-col items-start gap-2">
-        <h1 className="w-full text-center text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
+      <div className="flex max-w-[980px] flex-col items-center gap-2 md:w-1/2">
+        <h1 className="text-center text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
           Search a stock
         </h1>
       </div>
-      <div className="flex gap-4 md:w-1/2">
+      <div className="flex w-full gap-4 md:w-1/2">
         <Command className="rounded-lg border shadow-md">
           <CommandInput placeholder="Type a company name or ticker..." />
           <CommandList>
