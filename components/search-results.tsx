@@ -1,57 +1,66 @@
 "use client"
 
-import { useState } from "react"
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
-import { toast } from "@/components/ui/use-toast"
+import { Skeleton } from "@/components/ui/skeleton"
 
-interface SearchResults extends React.HTMLAttributes<HTMLFormElement> {}
+interface SearchResultsProps extends React.HTMLAttributes<HTMLFormElement> {
+  loading?: boolean
+  resultItems?: any[]
+}
 
-// Fill a results array of objects like {name:"company1", ticker:"ticker1"} for 20 results
+export function SearchResults({
+  className,
+  loading = false,
+  resultItems = [],
+  ...props
+}: SearchResultsProps) {
+  if (loading) {
+    return (
+      <div className="w-full">
+        {Array.from({ length: 5 }, (_, i) => (
+          <div key={i} className="mb-6 flex items-center space-x-6">
+            <Skeleton className="h-12 w-12 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-[250px]" />
+              <Skeleton className="h-4 w-[200px]" />
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
 
-const results = Array.from({ length: 20 }, (_, i) => ({
-  name: `company${i}`,
-  ticker: `ticker${i}`,
-  description: `I am a description for company${i}`,
-  image: "https://github.com/ArthurVerrez.png",
-}))
-
-export function SearchResults({ className, ...props }: SearchResults) {
   return (
     <div className="w-full">
       <h4 className="mb-4 text-sm font-medium leading-none">Results</h4>
-      {results.map((result) => (
-        <>
+      {resultItems.map((item) => (
+        <div key={item["ticker"]}>
           <Card>
-            <CardHeader key={result["name"]}>
+            <CardHeader>
               <div className="flex items-center space-x-4">
                 <Avatar>
-                  <AvatarImage src={result["image"]} />
-                  <AvatarFallback>{result["ticker"]}</AvatarFallback>
+                  <AvatarImage src={item["image"]} />
+                  <AvatarFallback>{item["ticker"]}</AvatarFallback>
                 </Avatar>
                 <div>
-                  <CardTitle>{result["name"]}</CardTitle>
-                  <CardDescription>{result["ticker"]}</CardDescription>
+                  <CardTitle>{item["name"]}</CardTitle>
+                  <CardDescription>{item["ticker"]}</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <CardDescription>{result["description"]}</CardDescription>
+              <CardDescription>{item["description"]}</CardDescription>
             </CardContent>
           </Card>
           <div className="my-2" />
-        </>
+        </div>
       ))}
     </div>
   )
