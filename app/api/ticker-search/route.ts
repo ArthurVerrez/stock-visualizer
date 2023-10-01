@@ -15,18 +15,8 @@ export async function GET(request: NextRequest) {
 
     const results = await yahooFinance.search(searchKey);
     var filteredTickers = results.quotes.map((quote: any) => ({
-      exchange:quote.exchange, 
-      shortname:quote.shortname, 
-      quoteType:quote.quoteType, 
-      symbol:quote.symbol, 
-      index:quote.index,
-      score:quote.score,
-      typeDisp:quote.typeDisp,
-      longname:quote.longname,
-      description:quote.longname,
       ticker:quote.symbol,
-      name:quote.shortname, 
-      image: "https://github.com/ArthurVerrez.png",
+      name:quote.shortname
     }));
 
     // exclude results without a ticker or name
@@ -34,11 +24,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(
       {
-        body: request.body,
-        path: request.nextUrl.pathname,
-        query: request.nextUrl.search,
-        cookies: request.cookies.getAll(),
-        results: filteredTickers,
+        tickers: filteredTickers,
       },
       { status: 200 }
     );

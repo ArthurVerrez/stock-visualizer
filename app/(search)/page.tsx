@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 
+import { toast } from "@/components/ui/use-toast"
 import { MainSearch } from "@/components/main-search"
 import { SearchResults } from "@/components/search-results"
 
@@ -10,7 +11,7 @@ export default function IndexPage() {
   const [results, setResults] = useState<any[]>([])
 
   const [searched, setSearched] = useState(false)
-  const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/yfinance`
+  const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/ticker-search`
 
   const handleSubmit = async (event: React.SyntheticEvent, value: string) => {
     event.preventDefault()
@@ -22,9 +23,14 @@ export default function IndexPage() {
         throw new Error("Network response was not ok")
       }
       const data = await response.json()
-      setResults(data.results)
+      setResults(data.tickers)
     } catch (error) {
       console.error("Fetch failed: ", error)
+      toast({
+        title: "Error getting search results",
+        description:
+          "There was an error getting search results. Please try again later.",
+      })
     } finally {
       setLoading(false)
     }
