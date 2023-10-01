@@ -16,7 +16,7 @@ interface StockPriceChartProps {
 }
 
 export function StockPriceChart({ data }: StockPriceChartProps) {
-  const maxTicks = 10
+  const maxTicks = 5
   const calculatedInterval = Math.ceil(data.length / maxTicks)
   return (
     <ResponsiveContainer width="100%" height={350}>
@@ -28,6 +28,7 @@ export function StockPriceChart({ data }: StockPriceChartProps) {
           tickLine={false}
           axisLine={false}
           interval={calculatedInterval}
+          tickFormatter={(date) => new Date(date).toLocaleDateString()}
         />
         <YAxis
           stroke="#888888"

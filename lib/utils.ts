@@ -60,3 +60,6 @@ export const formatLargeNumber = (num: number): string => {
   const formattedNumber = (num / divisor).toFixed(2)
   return `${formattedNumber} ${suffix}`
 }
+
+
+export const fetcher = (url: string) => fetch(url).then((res) => res.json())

@@ -1,3 +1,7 @@
+"use client"
+
+import React, { useEffect, useState } from "react"
+import { useHistorical, useQuoteSummary, useSearch } from "@/services/finance"
 import { BsCurrencyDollar, BsWater } from "react-icons/bs"
 
 import { Financials } from "@/lib/Financials"
@@ -6,31 +10,8 @@ import {
   formatLargeCurrency,
   formatLargeNumber,
 } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { toast } from "@/components/ui/use-toast"
 import { StockPriceChart } from "@/components/stock-price-chart"
 
 interface TickerPageProps {
@@ -39,67 +20,26 @@ interface TickerPageProps {
   }
 }
 
-const summaryApiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/quote-summary`
-const historicalApiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/historical`
-
-async function getTickerData(ticker: string) {
-  try {
-    const response = await fetch(`${summaryApiUrl}?ticker=${ticker}`)
-    if (!response.ok) {
-      throw new Error("Network response was not ok")
-    }
-    console.log(response)
-    const data = response.json()
-    console.log(data)
-    return data
-  } catch (error) {
-    console.error("Fetch failed: ", error)
-    toast({
-      title: "Error getting search results",
-      description:
-        "There was an error getting search results. Please try again later.",
-    })
-  }
-}
-
-async function getHistoricalData(ticker: string) {
-  console.log("getHistoricalData")
-  try {
-    const response = await fetch(`${historicalApiUrl}?ticker=${ticker}`)
-    if (!response.ok) {
-      throw new Error("Network response was not ok")
-    }
-    const data = response.json()
-    console.log(data)
-    return data
-  } catch (error) {
-    console.error("Fetch failed: ", error)
-    toast({
-      title: "Error getting search results",
-      description:
-        "There was an error getting search results. Please try again later.",
-    })
-  }
-}
-
-// Create fake data with 20 items, a list of objects with date and a number close
-
-const fakeData = Array.from({ length: 20 }, (_, i) => ({
-  date: new Date(2021, 0, i + 1),
-  close: Math.random() * 100,
-}))
-
-export default async function TickerPage({ params }: TickerPageProps) {
+export default function TickerPage({ params }: TickerPageProps) {
   const ticker = params?.slug?.join("/")
+  const { historical } = useHistorical(ticker)
+  const { quoteSummary } = useQuoteSummary(ticker)
 
-  const tickerData = await getTickerData(ticker)
-  const financials = Financials.fromRawData(tickerData)
-  var historicalData = await getHistoricalData(ticker)
+  const [financials, setFinancials] = useState<Financials>()
 
-  historicalData = historicalData.map((item: any) => ({
-    ...item,
-    date: new Date(item.date).toLocaleDateString(),
-  }))
+  useEffect(() => {
+    if (quoteSummary) {
+      setFinancials(Financials.fromRawData(quoteSummary))
+    }
+  }, [quoteSummary])
+
+  useEffect(() => {
+    // Modify historical data here if needed
+  }, [historical])
+
+  if (!financials || !historical) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div>
@@ -196,7 +136,7 @@ export default async function TickerPage({ params }: TickerPageProps) {
                     <CardTitle>Price</CardTitle>
                   </CardHeader>
                   <CardContent className="pl-2">
-                    <StockPriceChart data={historicalData} />
+                    <StockPriceChart data={historical} />
                   </CardContent>
                 </Card>
               </div>
