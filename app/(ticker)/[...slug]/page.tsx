@@ -1,5 +1,3 @@
-"use client"
-
 import { Financials } from "@/lib/Financials"
 import { Button } from "@/components/ui/button"
 import {
@@ -18,6 +16,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "@/components/ui/use-toast"
@@ -58,7 +61,7 @@ export default async function TickerPage({ params }: TickerPageProps) {
   return (
     <div>
       <section className="container mx-auto flex min-w-[400px] flex-col items-center justify-center gap-6 pb-8 pt-6 md:py-10">
-        <div className="flex-1 space-y-4 p-8 pt-6">
+        <div className="w-full flex-1 space-y-4 pt-6">
           <div className="flex items-center justify-between space-y-2">
             <h1 className="tracking-tight">
               <span className="mr-3 text-3xl font-bold">
@@ -72,7 +75,7 @@ export default async function TickerPage({ params }: TickerPageProps) {
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="analytics" disabled>
-                Analytics
+                AI Analytics
               </TabsTrigger>
             </TabsList>
             <TabsContent value="overview" className="space-y-4">
