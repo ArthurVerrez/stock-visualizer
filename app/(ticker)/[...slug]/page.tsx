@@ -1,4 +1,11 @@
+import { BsCurrencyDollar, BsWater } from "react-icons/bs"
+
 import { Financials } from "@/lib/Financials"
+import {
+  formatCurrency,
+  formatLargeCurrency,
+  formatLargeNumber,
+} from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -24,6 +31,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "@/components/ui/use-toast"
+import { StockPriceChart } from "@/components/stock-price-chart"
 
 interface TickerPageProps {
   params: {
@@ -31,11 +39,12 @@ interface TickerPageProps {
   }
 }
 
-const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/quote-summary`
+const summaryApiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/quote-summary`
+const historicalApiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/historical`
 
 async function getTickerData(ticker: string) {
   try {
-    const response = await fetch(`${apiUrl}?ticker=${ticker}`)
+    const response = await fetch(`${summaryApiUrl}?ticker=${ticker}`)
     if (!response.ok) {
       throw new Error("Network response was not ok")
     }
@@ -53,10 +62,44 @@ async function getTickerData(ticker: string) {
   }
 }
 
+async function getHistoricalData(ticker: string) {
+  console.log("getHistoricalData")
+  try {
+    const response = await fetch(`${historicalApiUrl}?ticker=${ticker}`)
+    if (!response.ok) {
+      throw new Error("Network response was not ok")
+    }
+    const data = response.json()
+    console.log(data)
+    return data
+  } catch (error) {
+    console.error("Fetch failed: ", error)
+    toast({
+      title: "Error getting search results",
+      description:
+        "There was an error getting search results. Please try again later.",
+    })
+  }
+}
+
+// Create fake data with 20 items, a list of objects with date and a number close
+
+const fakeData = Array.from({ length: 20 }, (_, i) => ({
+  date: new Date(2021, 0, i + 1),
+  close: Math.random() * 100,
+}))
+
 export default async function TickerPage({ params }: TickerPageProps) {
   const ticker = params?.slug?.join("/")
+
   const tickerData = await getTickerData(ticker)
   const financials = Financials.fromRawData(tickerData)
+  var historicalData = await getHistoricalData(ticker)
+
+  historicalData = historicalData.map((item: any) => ({
+    ...item,
+    date: new Date(item.date).toLocaleDateString(),
+  }))
 
   return (
     <div>
@@ -83,120 +126,78 @@ export default async function TickerPage({ params }: TickerPageProps) {
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Total Revenue
+                      Stock Price
                     </CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-4 w-4 text-muted-foreground"
-                    >
-                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                    </svg>
+
+                    <BsCurrencyDollar />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">$45,231.89</div>
-                    <p className="text-xs text-muted-foreground">
+                    <div className="text-2xl font-bold">
+                      {formatCurrency(financials.bid, financials.currency)}
+                    </div>
+                    {/* <p className="text-xs text-muted-foreground">
                       +20.1% from last month
-                    </p>
+                    </p> */}
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Subscriptions
-                    </CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-4 w-4 text-muted-foreground"
-                    >
-                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                      <circle cx="9" cy="7" r="4" />
-                      <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                    </svg>
+                    <CardTitle className="text-sm font-medium">Open</CardTitle>
+                    <BsCurrencyDollar />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+2350</div>
-                    <p className="text-xs text-muted-foreground">
+                    <div className="text-2xl font-bold">
+                      {formatCurrency(financials.open, financials.currency)}
+                    </div>
+                    {/* <p className="text-xs text-muted-foreground">
                       +180.1% from last month
-                    </p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Sales</CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-4 w-4 text-muted-foreground"
-                    >
-                      <rect width="20" height="14" x="2" y="5" rx="2" />
-                      <path d="M2 10h20" />
-                    </svg>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">+12,234</div>
-                    <p className="text-xs text-muted-foreground">
-                      +19% from last month
-                    </p>
+                    </p> */}
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Active Now
+                      Market Capitalization
                     </CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-4 w-4 text-muted-foreground"
-                    >
-                      <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                    </svg>
+                    <BsCurrencyDollar />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+573</div>
-                    <p className="text-xs text-muted-foreground">
+                    <div className="text-2xl font-bold">
+                      {formatLargeCurrency(
+                        financials.marketCap,
+                        financials.currency
+                      )}
+                    </div>
+                    {/* <p className="text-xs text-muted-foreground">
+                      +19% from last month
+                    </p> */}
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Volume
+                    </CardTitle>
+                    <BsWater />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">
+                      {formatLargeNumber(financials.volume)}
+                    </div>
+                    {/* <p className="text-xs text-muted-foreground">
                       +201 since last hour
-                    </p>
+                    </p> */}
                   </CardContent>
                 </Card>
               </div>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+              <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-1">
                 <Card className="col-span-4">
                   <CardHeader>
-                    <CardTitle>Overview</CardTitle>
+                    <CardTitle>Price</CardTitle>
                   </CardHeader>
-                  <CardContent className="pl-2">Hey</CardContent>
-                </Card>
-                <Card className="col-span-3">
-                  <CardHeader>
-                    <CardTitle>Recent Sales</CardTitle>
-                    <CardDescription>
-                      You made 265 sales this month.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>Hey</CardContent>
+                  <CardContent className="pl-2">
+                    <StockPriceChart data={historicalData} />
+                  </CardContent>
                 </Card>
               </div>
             </TabsContent>

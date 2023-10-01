@@ -4,6 +4,8 @@ type RawSummaryDetail = {
     dayLow: number;
     dayHigh: number;
     marketCap: number;
+    bid: number;
+    volume : number;
   };
   
   type RawPrice = {
@@ -37,6 +39,8 @@ type RawSummaryDetail = {
     dayLow: number;
     dayHigh: number;
     open: number;
+    bid: number;
+    volume: number;
   
     constructor({
       ticker,
@@ -51,6 +55,8 @@ type RawSummaryDetail = {
       dayLow,
       dayHigh,
       open,
+      bid,
+      volume,
     }: {
       ticker: string;
       exchange: string;
@@ -64,6 +70,8 @@ type RawSummaryDetail = {
       dayLow: number;
       dayHigh: number;
       open: number;
+      bid: number;
+      volume: number;
     }) {
       this.ticker = ticker;
       this.exchange = exchange;
@@ -77,6 +85,8 @@ type RawSummaryDetail = {
       this.dayLow = dayLow;
       this.dayHigh = dayHigh;
       this.open = open;
+      this.bid = bid;
+    this.volume = volume;
     }
   
     static fromRawData(rawData: RawData): Financials {
@@ -93,6 +103,8 @@ type RawSummaryDetail = {
         dayLow: rawData.summaryDetail.dayLow,
         dayHigh: rawData.summaryDetail.dayHigh,
         open: rawData.summaryDetail.open,
+        bid: rawData.summaryDetail.bid,
+        volume: rawData.summaryDetail.volume,
       });
     }
   }

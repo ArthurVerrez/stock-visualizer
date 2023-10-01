@@ -13,8 +13,8 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
-
-    const results = await yahooFinance.quoteSummary(ticker);
+    const queryOptions = { period1: '2023-01-01', /* ... */ };
+    var results = await yahooFinance.historical(ticker, queryOptions);
 
     return NextResponse.json(
       results,
