@@ -40,19 +40,25 @@ export function SearchResults({
   return (
     <div className="w-full">
       <h4 className="mb-4 text-sm font-medium leading-none">Results</h4>
-      {resultItems.map((item) => (
-        <div key={item["ticker"]}>
-          <Card className="cursor-pointer">
-            <CardHeader>
-              <div>
-                <CardTitle>{item["ticker"]}</CardTitle>
-                <CardDescription>{item["name"]}</CardDescription>
-              </div>
-            </CardHeader>
-          </Card>
-          <div className="my-2" />
-        </div>
-      ))}
+      {resultItems.length > 0 ? (
+        resultItems.map((item) => (
+          <div key={item["ticker"]}>
+            <Card className="cursor-pointer">
+              <CardHeader>
+                <div>
+                  <CardTitle>{item["ticker"]}</CardTitle>
+                  <CardDescription>{item["name"]}</CardDescription>
+                </div>
+              </CardHeader>
+            </Card>
+            <div className="my-2" />
+          </div>
+        ))
+      ) : (
+        <p className="text-center italic">
+          No company/ticker matches your query. Try something else.
+        </p>
+      )}
     </div>
   )
 }
