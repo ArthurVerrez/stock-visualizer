@@ -17,7 +17,7 @@ interface StockPriceChartProps {
 
 export function StockPriceChart({ data }: StockPriceChartProps) {
   const maxTicks = 5
-  const calculatedInterval = Math.ceil(data.length / maxTicks)
+  const calculatedInterval = Math.ceil(data?.length / maxTicks)
   return (
     <ResponsiveContainer width="100%" height={350}>
       <BarChart data={data}>

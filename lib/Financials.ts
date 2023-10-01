@@ -91,20 +91,39 @@ type RawSummaryDetail = {
   
     static fromRawData(rawData: RawData): Financials {
       return new Financials({
-        ticker: rawData.price.symbol,
-        exchange: rawData.price.exchange,
-        exchangeName: rawData.price.exchangeName,
-        quoteSourceName: rawData.price.quoteSourceName,
-        shortName: rawData.price.shortName,
-        longName: rawData.price.longName,
-        currency: rawData.price.currency,
-        marketCap: rawData.price.marketCap,
-        averageVolume: rawData.price.averageVolume,
-        dayLow: rawData.summaryDetail.dayLow,
-        dayHigh: rawData.summaryDetail.dayHigh,
-        open: rawData.summaryDetail.open,
-        bid: rawData.summaryDetail.bid,
-        volume: rawData.summaryDetail.volume,
+        ticker: rawData.price?.symbol,
+        exchange: rawData.price?.exchange,
+        exchangeName: rawData.price?.exchangeName,
+        quoteSourceName: rawData.price?.quoteSourceName,
+        shortName: rawData.price?.shortName,
+        longName: rawData.price?.longName,
+        currency: rawData.price?.currency,
+        marketCap: rawData.price?.marketCap,
+        averageVolume: rawData.price?.averageVolume,
+        dayLow: rawData.summaryDetail?.dayLow,
+        dayHigh: rawData.summaryDetail?.dayHigh,
+        open: rawData.summaryDetail?.open,
+        bid: rawData.summaryDetail?.bid,
+        volume: rawData.summaryDetail?.volume,
+      });
+    }
+
+    static empty(): Financials {
+      return new Financials({
+        ticker: "",
+        exchange: "",
+        exchangeName: "",
+        quoteSourceName: "",
+        shortName: "",
+        longName: "",
+        currency: "USD",
+        marketCap: 0,
+        averageVolume: 0,
+        dayLow: 0,
+        dayHigh: 0,
+        open: 0,
+        bid: 0,
+        volume: 0,
       });
     }
   }

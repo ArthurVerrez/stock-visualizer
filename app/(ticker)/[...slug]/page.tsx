@@ -11,7 +11,9 @@ import {
   formatLargeNumber,
 } from "@/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { toast } from "@/components/ui/use-toast"
 import { StockPriceChart } from "@/components/stock-price-chart"
 
 interface TickerPageProps {
@@ -22,10 +24,18 @@ interface TickerPageProps {
 
 export default function TickerPage({ params }: TickerPageProps) {
   const ticker = params?.slug?.join("/")
-  const { historical } = useHistorical(ticker)
-  const { quoteSummary } = useQuoteSummary(ticker)
+  const {
+    historical,
+    isLoading: isLoadingHistorical,
+    isError: isErrorHistorical,
+  } = useHistorical(ticker)
+  const {
+    quoteSummary,
+    isLoading: isLoadingQuote,
+    isError: isErrorQuote,
+  } = useQuoteSummary(ticker)
 
-  const [financials, setFinancials] = useState<Financials>()
+  const [financials, setFinancials] = useState<Financials>(Financials.empty())
 
   useEffect(() => {
     if (quoteSummary) {
@@ -37,9 +47,15 @@ export default function TickerPage({ params }: TickerPageProps) {
     // Modify historical data here if needed
   }, [historical])
 
-  if (!financials || !historical) {
-    return <div>Loading...</div>
-  }
+  useEffect(() => {
+    if (isErrorHistorical || isErrorQuote) {
+      toast({
+        title: "Error fetching data",
+        description:
+          "An error occurred while fetching data. Please try again later.",
+      })
+    }
+  }, [isErrorHistorical, isErrorQuote])
 
   return (
     <div>
@@ -48,10 +64,15 @@ export default function TickerPage({ params }: TickerPageProps) {
           <div className="flex items-center justify-between space-y-2">
             <h1 className="tracking-tight">
               <span className="mr-3 text-3xl font-bold">
-                {financials.shortName}
+                {isLoadingQuote ? (
+                  <Skeleton className="h-4 w-[250px]" />
+                ) : (
+                  financials.shortName
+                )}
               </span>
-
-              <span className="text-2xl">({financials.ticker})</span>
+              {isLoadingQuote ? null : (
+                <span className="text-2xl">({financials.ticker})</span>
+              )}
             </h1>
           </div>
           <Tabs defaultValue="overview" className="space-y-4">
@@ -73,7 +94,11 @@ export default function TickerPage({ params }: TickerPageProps) {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
-                      {formatCurrency(financials.bid, financials.currency)}
+                      {isLoadingQuote ? (
+                        <Skeleton className="h-4 w-[250px]" />
+                      ) : (
+                        formatCurrency(financials.bid, financials.currency)
+                      )}
                     </div>
                     {/* <p className="text-xs text-muted-foreground">
                       +20.1% from last month
@@ -87,11 +112,12 @@ export default function TickerPage({ params }: TickerPageProps) {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
-                      {formatCurrency(financials.open, financials.currency)}
+                      {isLoadingQuote ? (
+                        <Skeleton className="h-4 w-[250px]" />
+                      ) : (
+                        formatCurrency(financials.open, financials.currency)
+                      )}
                     </div>
-                    {/* <p className="text-xs text-muted-foreground">
-                      +180.1% from last month
-                    </p> */}
                   </CardContent>
                 </Card>
                 <Card>
@@ -103,14 +129,15 @@ export default function TickerPage({ params }: TickerPageProps) {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
-                      {formatLargeCurrency(
-                        financials.marketCap,
-                        financials.currency
+                      {isLoadingQuote ? (
+                        <Skeleton className="h-4 w-[250px]" />
+                      ) : (
+                        formatLargeCurrency(
+                          financials.marketCap,
+                          financials.currency
+                        )
                       )}
                     </div>
-                    {/* <p className="text-xs text-muted-foreground">
-                      +19% from last month
-                    </p> */}
                   </CardContent>
                 </Card>
                 <Card>
@@ -122,11 +149,12 @@ export default function TickerPage({ params }: TickerPageProps) {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
-                      {formatLargeNumber(financials.volume)}
+                      {isLoadingQuote ? (
+                        <Skeleton className="h-4 w-[250px]" />
+                      ) : (
+                        formatLargeNumber(financials.volume)
+                      )}
                     </div>
-                    {/* <p className="text-xs text-muted-foreground">
-                      +201 since last hour
-                    </p> */}
                   </CardContent>
                 </Card>
               </div>
@@ -136,7 +164,11 @@ export default function TickerPage({ params }: TickerPageProps) {
                     <CardTitle>Price</CardTitle>
                   </CardHeader>
                   <CardContent className="pl-2">
-                    <StockPriceChart data={historical} />
+                    {isLoadingHistorical ? (
+                      <Skeleton className="h-20 w-full" />
+                    ) : (
+                      <StockPriceChart data={historical} />
+                    )}
                   </CardContent>
                 </Card>
               </div>
