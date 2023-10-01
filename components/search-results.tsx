@@ -1,12 +1,10 @@
 "use client"
 
-import { useEffect } from "react"
 import Link from "next/link"
 import { useSearch } from "@/services/finance"
 
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -17,11 +15,7 @@ interface SearchResultsProps extends React.HTMLAttributes<HTMLFormElement> {
   value: string | null
 }
 
-export function SearchResults({
-  className,
-  value,
-  ...props
-}: SearchResultsProps) {
+export function SearchResults({ value }: SearchResultsProps) {
   const { tickers, isLoading, isError } = useSearch(value)
 
   if (!value || value.length < 2) {
