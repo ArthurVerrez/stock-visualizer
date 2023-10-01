@@ -1,7 +1,8 @@
 "use client"
 
+import { isError } from "util"
 import React, { useEffect, useState } from "react"
-import { useHistorical, useQuoteSummary, useSearch } from "@/services/finance"
+import { useChart, useQuoteSummary } from "@/services/finance"
 import { BsCurrencyDollar, BsWater } from "react-icons/bs"
 
 import { Financials } from "@/lib/Financials"
@@ -25,10 +26,10 @@ interface TickerPageProps {
 export default function TickerPage({ params }: TickerPageProps) {
   const ticker = params?.slug?.join("/")
   const {
-    historical,
-    isLoading: isLoadingHistorical,
-    isError: isErrorHistorical,
-  } = useHistorical(ticker)
+    chart,
+    isLoading: isLoadingChart,
+    isError: isErrorChart,
+  } = useChart(ticker)
   const {
     quoteSummary,
     isLoading: isLoadingQuote,
@@ -45,17 +46,17 @@ export default function TickerPage({ params }: TickerPageProps) {
 
   useEffect(() => {
     // Modify historical data here if needed
-  }, [historical])
+  }, [chart])
 
   useEffect(() => {
-    if (isErrorHistorical || isErrorQuote) {
+    if (isErrorChart || isErrorQuote) {
       toast({
         title: "Error fetching data",
         description:
           "An error occurred while fetching data. Please try again later.",
       })
     }
-  }, [isErrorHistorical, isErrorQuote])
+  }, [isErrorChart, isErrorQuote])
 
   return (
     <div>
@@ -97,7 +98,10 @@ export default function TickerPage({ params }: TickerPageProps) {
                       {isLoadingQuote ? (
                         <Skeleton className="h-4 w-[250px]" />
                       ) : (
-                        formatCurrency(financials.bid, financials.currency)
+                        formatCurrency(
+                          financials.regularMarketPrice,
+                          financials.currency
+                        )
                       )}
                     </div>
                     {/* <p className="text-xs text-muted-foreground">
@@ -164,10 +168,10 @@ export default function TickerPage({ params }: TickerPageProps) {
                     <CardTitle>Price</CardTitle>
                   </CardHeader>
                   <CardContent className="pl-2">
-                    {isLoadingHistorical ? (
+                    {isLoadingChart ? (
                       <Skeleton className="h-20 w-full" />
                     ) : (
-                      <StockPriceChart data={historical} />
+                      <StockPriceChart data={chart} />
                     )}
                   </CardContent>
                 </Card>

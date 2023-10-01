@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { Input } from "@/components/ui/input"
 
@@ -10,12 +10,18 @@ interface MainSearchProps extends React.HTMLAttributes<HTMLFormElement> {
 }
 
 export function MainSearch({
-  className,
   submitCallback,
   changeCallback,
   ...props
 }: MainSearchProps) {
   const [value, setValue] = useState("")
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [])
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value)
     changeCallback(event, event.target.value)
@@ -29,6 +35,7 @@ export function MainSearch({
   return (
     <form onSubmit={handleSubmit} className="w-full" {...props}>
       <Input
+        ref={inputRef}
         type="search"
         placeholder="Type in a company name or a ticker..."
         value={value}

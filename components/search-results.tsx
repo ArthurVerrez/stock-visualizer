@@ -1,5 +1,6 @@
 "use client"
 
+import React, { useEffect, useState } from "react"
 import Link from "next/link"
 import { useSearch } from "@/services/finance"
 
@@ -17,6 +18,42 @@ interface SearchResultsProps extends React.HTMLAttributes<HTMLFormElement> {
 
 export function SearchResults({ value }: SearchResultsProps) {
   const { tickers, isLoading, isError } = useSearch(value)
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+
+  useEffect(() => {
+    function handleKeyPress(event: KeyboardEvent) {
+      if (tickers && tickers.length > 0) {
+        if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+          event.preventDefault() // Prevent default behavior
+        }
+        if (event.key === "ArrowDown") {
+          setSelectedIndex((prevIndex) =>
+            Math.min((prevIndex ?? -1) + 1, tickers.length - 1)
+          )
+        } else if (event.key === "ArrowUp") {
+          setSelectedIndex((prevIndex) => Math.max((prevIndex ?? 1) - 1, 0))
+        } else if (event.key === "Enter" && selectedIndex !== null) {
+          const selectedTicker = tickers[selectedIndex]
+          if (selectedTicker) {
+            window.location.href = `/${selectedTicker["ticker"]}`
+          }
+        }
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyPress)
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress)
+    }
+  }, [tickers, selectedIndex])
+
+  useEffect(() => {
+    if (tickers && tickers.length > 0) {
+      setSelectedIndex(0)
+    } else {
+      setSelectedIndex(null)
+    }
+  }, [tickers])
 
   if (!value || value.length < 2) {
     return <div></div>
@@ -46,10 +83,10 @@ export function SearchResults({ value }: SearchResultsProps) {
     <div className="w-full">
       <h4 className="mb-4 text-sm font-medium leading-none">Results</h4>
       {tickers?.length > 0 ? (
-        tickers.map((item: any) => (
+        tickers.map((item: any, index: number) => (
           <Link key={item["ticker"]} href={`/${item["ticker"]}`}>
             <div style={{ cursor: "pointer" }}>
-              <Card>
+              <Card className={index === selectedIndex ? "bg-secondary" : ""}>
                 <CardHeader>
                   <div>
                     <CardTitle>{item["ticker"]}</CardTitle>

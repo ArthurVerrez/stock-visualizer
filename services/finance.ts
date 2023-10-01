@@ -26,6 +26,18 @@ export const useHistorical = (ticker: string | null) => {
   }
 }
 
+export const useChart = (ticker: string | null) => {
+  const { data, error, isLoading } = useSWR(
+    ticker ? `/api/chart?ticker=${ticker}` : null,
+    fetcher
+  )
+  return {
+    chart: data,
+    isLoading: isLoading,
+    isError: error,
+  }
+}
+
 export const useQuoteSummary = (ticker: string | null) => {
   const { data, error, isLoading } = useSWR(
     ticker ? `/api/quote-summary?ticker=${ticker}` : null,
