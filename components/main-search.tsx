@@ -21,12 +21,6 @@ export function MainSearch({
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault()
-    console.log(event)
-    toast({
-      title: "Not implemented",
-      description: `You submitted: ${value}`,
-    })
-
     submitCallback(event, value)
   }
 
