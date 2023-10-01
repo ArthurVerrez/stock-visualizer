@@ -7,8 +7,6 @@ import { SearchResults } from "@/components/search-results"
 
 export default function IndexPage() {
   const [searchValue, setSearchValue] = useState("")
-  const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/ticker-search`
-
   const handleChange = (event: React.SyntheticEvent, value: string) => {
     setSearchValue(value)
   }
@@ -24,7 +22,7 @@ export default function IndexPage() {
         <div className=" flex w-full gap-4 md:w-1/2">
           <MainSearch
             className="w-full"
-            submitCallback={(event) => {}}
+            submitCallback={() => {}}
             changeCallback={handleChange}
           />
         </div>

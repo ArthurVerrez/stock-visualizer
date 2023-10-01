@@ -3,7 +3,6 @@
 import { useState } from "react"
 
 import { Input } from "@/components/ui/input"
-import { toast } from "@/components/ui/use-toast"
 
 interface MainSearchProps extends React.HTMLAttributes<HTMLFormElement> {
   submitCallback: (event: React.SyntheticEvent, value: string) => void
