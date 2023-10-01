@@ -66,7 +66,7 @@ export default function TickerPage({ params }: TickerPageProps) {
             <h1 className="tracking-tight">
               <span className="mr-3 text-3xl font-bold">
                 {isLoadingQuote ? (
-                  <Skeleton className="h-4 w-[250px]" />
+                  <Skeleton className="h-4 w-10/12" />
                 ) : (
                   financials.shortName
                 )}
@@ -96,7 +96,7 @@ export default function TickerPage({ params }: TickerPageProps) {
                   <CardContent>
                     <div className="text-2xl font-bold">
                       {isLoadingQuote ? (
-                        <Skeleton className="h-4 w-[250px]" />
+                        <Skeleton className="h-4 w-10/12" />
                       ) : (
                         formatCurrency(
                           financials.regularMarketPrice,
@@ -117,7 +117,7 @@ export default function TickerPage({ params }: TickerPageProps) {
                   <CardContent>
                     <div className="text-2xl font-bold">
                       {isLoadingQuote ? (
-                        <Skeleton className="h-4 w-[250px]" />
+                        <Skeleton className="h-4 w-10/12" />
                       ) : (
                         formatCurrency(financials.open, financials.currency)
                       )}
@@ -134,7 +134,7 @@ export default function TickerPage({ params }: TickerPageProps) {
                   <CardContent>
                     <div className="text-2xl font-bold">
                       {isLoadingQuote ? (
-                        <Skeleton className="h-4 w-[250px]" />
+                        <Skeleton className="h-4 w-10/12" />
                       ) : (
                         formatLargeCurrency(
                           financials.marketCap,
@@ -154,7 +154,7 @@ export default function TickerPage({ params }: TickerPageProps) {
                   <CardContent>
                     <div className="text-2xl font-bold">
                       {isLoadingQuote ? (
-                        <Skeleton className="h-4 w-[250px]" />
+                        <Skeleton className="h-4 w-10/12" />
                       ) : (
                         formatLargeNumber(financials.volume)
                       )}
