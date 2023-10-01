@@ -11,12 +11,16 @@ import {
 
 import { formatCurrency } from "@/lib/utils"
 
+import { ScrollArea } from "./ui/scroll-area"
+
 interface StockPriceChartProps {
   data: any
 }
 
 export function StockPriceChart({ data }: StockPriceChartProps) {
-  const maxTicks = 5
+  // If the screen is md or larger, we want to show a max of 5 ticks
+  // If the screen is sm or smaller, we want to show a max of 3 ticks
+  const maxTicks = window.innerWidth >= 768 ? 5 : 3
   const calculatedInterval = Math.ceil(data?.quotes?.length / maxTicks)
   return (
     <ResponsiveContainer width="100%" height={350}>
