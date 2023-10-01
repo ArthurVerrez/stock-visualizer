@@ -7,16 +7,19 @@ import { toast } from "@/components/ui/use-toast"
 
 interface MainSearchProps extends React.HTMLAttributes<HTMLFormElement> {
   submitCallback: (event: React.SyntheticEvent, value: string) => void
+  changeCallback: (event: React.SyntheticEvent, value: string) => void
 }
 
 export function MainSearch({
   className,
   submitCallback,
+  changeCallback,
   ...props
 }: MainSearchProps) {
   const [value, setValue] = useState("")
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value)
+    changeCallback(event, event.target.value)
   }
 
   const handleSubmit = (event: React.SyntheticEvent) => {

@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export async function GET(request: NextRequest) {
+  
   try {
     const searchKey: string | null = request.nextUrl.searchParams.get('search');
 
@@ -21,11 +22,9 @@ export async function GET(request: NextRequest) {
 
     // exclude results without a ticker or name
     filteredTickers=filteredTickers.filter((ticker) => ticker.ticker && ticker.name);
-
+    console.log(filteredTickers)
     return NextResponse.json(
-      {
-        tickers: filteredTickers,
-      },
+      filteredTickers,
       { status: 200 }
     );
   } catch (err) {

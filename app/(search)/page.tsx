@@ -2,38 +2,15 @@
 
 import { useState } from "react"
 
-import { toast } from "@/components/ui/use-toast"
 import { MainSearch } from "@/components/main-search"
 import { SearchResults } from "@/components/search-results"
 
 export default function IndexPage() {
-  const [loading, setLoading] = useState(false)
-  const [results, setResults] = useState<any[]>([])
-
-  const [searched, setSearched] = useState(false)
+  const [searchValue, setSearchValue] = useState("")
   const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/ticker-search`
 
-  const handleSubmit = async (event: React.SyntheticEvent, value: string) => {
-    event.preventDefault()
-    setSearched(true)
-    setLoading(true)
-    try {
-      const response = await fetch(`${apiUrl}?search=${value}`)
-      if (!response.ok) {
-        throw new Error("Network response was not ok")
-      }
-      const data = await response.json()
-      setResults(data.tickers)
-    } catch (error) {
-      console.error("Fetch failed: ", error)
-      toast({
-        title: "Error getting search results",
-        description:
-          "There was an error getting search results. Please try again later.",
-      })
-    } finally {
-      setLoading(false)
-    }
+  const handleChange = (event: React.SyntheticEvent, value: string) => {
+    setSearchValue(value)
   }
 
   return (
@@ -45,17 +22,15 @@ export default function IndexPage() {
           </h1>
         </div>
         <div className=" flex w-full gap-4 md:w-1/2">
-          <MainSearch className="w-full" submitCallback={handleSubmit} />
+          <MainSearch
+            className="w-full"
+            submitCallback={(event) => {}}
+            changeCallback={handleChange}
+          />
         </div>
-        {searched && (
-          <div className="flex w-full gap-4 md:w-1/2">
-            <SearchResults
-              className="w-full"
-              loading={loading}
-              resultItems={results}
-            />
-          </div>
-        )}
+        <div className="flex w-full gap-4 md:w-1/2">
+          <SearchResults className="w-full" value={searchValue} />
+        </div>
       </section>
     </div>
   )

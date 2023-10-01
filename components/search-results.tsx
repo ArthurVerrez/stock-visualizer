@@ -1,8 +1,9 @@
 "use client"
 
+import { useEffect } from "react"
 import Link from "next/link"
+import { useSearch } from "@/services/finance"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Card,
   CardContent,
@@ -13,17 +14,21 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 
 interface SearchResultsProps extends React.HTMLAttributes<HTMLFormElement> {
-  loading?: boolean
-  resultItems?: any[]
+  value: string | null
 }
 
 export function SearchResults({
   className,
-  loading = false,
-  resultItems = [],
+  value,
   ...props
 }: SearchResultsProps) {
-  if (loading) {
+  const { tickers, isLoading, isError } = useSearch(value)
+
+  if (!value || value.length < 2) {
+    return <div></div>
+  }
+
+  if (isLoading) {
     return (
       <div className="w-full">
         {Array.from({ length: 5 }, (_, i) => (
@@ -39,11 +44,15 @@ export function SearchResults({
     )
   }
 
+  if (isError) {
+    return <p>Error loading data.</p>
+  }
+
   return (
     <div className="w-full">
       <h4 className="mb-4 text-sm font-medium leading-none">Results</h4>
-      {resultItems.length > 0 ? (
-        resultItems.map((item) => (
+      {tickers?.length > 0 ? (
+        tickers.map((item: any) => (
           <Link key={item["ticker"]} href={`/${item["ticker"]}`}>
             <div style={{ cursor: "pointer" }}>
               <Card>
