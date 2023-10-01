@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "sed -i '8,9d' node_modules/yahoo-finance2/dist/esm/src/env-node.js && next build",
+    "build": "(grep -q 'await import(\\\"./lib/fetchDevel.js\\\");' node_modules/yahoo-finance2/dist/esm/src/env-node.js && sed -i '8,9d' node_modules/yahoo-finance2/dist/esm/src/env-node.js) || true; next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
