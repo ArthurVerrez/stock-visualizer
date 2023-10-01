@@ -44,6 +44,7 @@ export function StockPriceChart({ data }: StockPriceChartProps) {
           formatter={(value: number) =>
             formatCurrency(value, data?.meta?.currency)
           }
+          labelFormatter={(date) => new Date(date).toLocaleDateString()}
         />
         <Bar dataKey="close" fill="#8884d8" radius={[4, 4, 0, 0]} />
       </BarChart>
