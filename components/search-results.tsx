@@ -1,5 +1,7 @@
 "use client"
 
+import Link from "next/link"
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Card,
@@ -42,17 +44,19 @@ export function SearchResults({
       <h4 className="mb-4 text-sm font-medium leading-none">Results</h4>
       {resultItems.length > 0 ? (
         resultItems.map((item) => (
-          <div key={item["ticker"]}>
-            <Card className="cursor-pointer">
-              <CardHeader>
-                <div>
-                  <CardTitle>{item["ticker"]}</CardTitle>
-                  <CardDescription>{item["name"]}</CardDescription>
-                </div>
-              </CardHeader>
-            </Card>
-            <div className="my-2" />
-          </div>
+          <Link key={item["ticker"]} href={`/${item["ticker"]}`}>
+            <div style={{ cursor: "pointer" }}>
+              <Card>
+                <CardHeader>
+                  <div>
+                    <CardTitle>{item["ticker"]}</CardTitle>
+                    <CardDescription>{item["name"]}</CardDescription>
+                  </div>
+                </CardHeader>
+              </Card>
+              <div className="my-2" />
+            </div>
+          </Link>
         ))
       ) : (
         <p className="text-center italic">
