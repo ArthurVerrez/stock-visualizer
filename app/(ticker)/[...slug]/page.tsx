@@ -3,7 +3,7 @@
 import * as React from "react"
 import { useEffect, useState } from "react"
 import { useChart, useQuoteSummary } from "@/services/finance"
-import { addDays } from "date-fns"
+import { subDays } from "date-fns"
 import { DateRange } from "react-day-picker"
 import { BsCurrencyDollar, BsWater } from "react-icons/bs"
 
@@ -30,8 +30,8 @@ export default function TickerPage({ params }: TickerPageProps) {
   const ticker = params?.slug?.join("/")
 
   const [chartDate, chartSetDate] = useState({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
+    from: subDays(new Date(), 30),
+    to: new Date(),
   })
 
   const {
