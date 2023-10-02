@@ -53,19 +53,21 @@ export default function TickerPage({ params }: TickerPageProps) {
     }
   }, [quoteSummary])
 
-  useEffect(() => {
-    // Modify historical data here if needed
-  }, [chart])
-
-  useEffect(() => {
-    if (isErrorChart || isErrorQuote) {
-      toast({
-        title: "Error fetching data",
-        description:
-          "An error occurred while fetching data. Please try again later.",
-      })
-    }
-  }, [isErrorChart, isErrorQuote])
+  if (isErrorChart || isErrorQuote) {
+    return (
+      <div>
+        <section className="container mx-auto flex min-w-[400px] flex-col items-center justify-center gap-6 pb-8 pt-6 md:py-10">
+          <div className="w-full flex-1 space-y-4 pt-6">
+            <div className="flex items-center justify-between space-y-2">
+              <h1 className="tracking-tight">
+                Error getting the data for the ticker
+              </h1>
+            </div>
+          </div>
+        </section>
+      </div>
+    )
+  }
 
   return (
     <div>

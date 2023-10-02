@@ -5,7 +5,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const formatCurrency = (amount: number, currency: string = "USD", precision: number = 2) => {
+export const formatCurrency = (
+  amount: number,
+  currency: string = "USD",
+  precision: number = 2
+) => {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
@@ -63,5 +67,12 @@ export const formatLargeNumber = (num: number): string => {
   return `${formattedNumber} ${suffix}`
 }
 
+export const fetcher = async (url: string): Promise<any> => {
+  const res = await fetch(url)
 
-export const fetcher = (url: string) => fetch(url).then((res) => res.json())
+  if (res.status != 200) {
+    throw new Error(`A ${res.status} error occurred while fetching the data.`) // Throw the error
+  }
+
+  return res.json()
+}
