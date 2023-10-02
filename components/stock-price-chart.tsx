@@ -44,7 +44,7 @@ export function StockPriceChart({ data }: StockPriceChartProps) {
           }
         />
         <Tooltip
-          contentStyle={{ background: "black" }}
+          wrapperClassName="dark:bg-gray-800 dark:text-gray-100 bg-white text-gray-900 border border-gray-200"
           formatter={(value: number) =>
             formatCurrency(value, data?.meta?.currency)
           }
