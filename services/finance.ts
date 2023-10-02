@@ -26,9 +26,17 @@ export const useHistorical = (ticker: string | null) => {
   }
 }
 
-export const useChart = (ticker: string | null) => {
+export const useChart = (
+  ticker: string | null,
+  dateStart: Date = new Date(2023, 1, 1),
+  dateEnd: Date = new Date()
+) => {
   const { data, error, isLoading } = useSWR(
-    ticker ? `/api/chart?ticker=${ticker}` : null,
+    ticker
+      ? `/api/chart?ticker=${ticker}&periodStart=${
+          dateStart.toISOString().split("T")[0]
+        }&periodEnd=${dateEnd.toISOString().split("T")[0]}`
+      : null,
     fetcher
   )
   return {

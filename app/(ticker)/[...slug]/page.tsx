@@ -38,7 +38,7 @@ export default function TickerPage({ params }: TickerPageProps) {
     chart,
     isLoading: isLoadingChart,
     isError: isErrorChart,
-  } = useChart(ticker)
+  } = useChart(ticker, chartDate.from, chartDate.to)
   const {
     quoteSummary,
     isLoading: isLoadingQuote,
@@ -174,9 +174,7 @@ export default function TickerPage({ params }: TickerPageProps) {
               <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-1">
                 <Card className="col-span-4">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle>
-                      Price ({new Date(chartDate.from).toLocaleDateString()})
-                    </CardTitle>
+                    <CardTitle>Price</CardTitle>
                     <DatePickerWithRange
                       date={chartDate}
                       setDate={chartSetDate}
