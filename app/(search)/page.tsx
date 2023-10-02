@@ -1,8 +1,11 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MainSearch } from "@/components/main-search"
+import { PopularResults } from "@/components/popular-results"
 import { SearchResults } from "@/components/search-results"
 
 export default function IndexPage() {
@@ -28,6 +31,9 @@ export default function IndexPage() {
         </div>
         <div className="flex w-full gap-4 md:w-1/2">
           <SearchResults className="w-full" value={searchValue} />
+        </div>
+        <div className="w-full md:w-1/2">
+          <PopularResults />
         </div>
       </section>
     </div>
