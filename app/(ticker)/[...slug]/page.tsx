@@ -1,8 +1,10 @@
 "use client"
 
-import { isError } from "util"
-import React, { useEffect, useState } from "react"
+import * as React from "react"
+import { useEffect, useState } from "react"
 import { useChart, useQuoteSummary } from "@/services/finance"
+import { subDays } from "date-fns"
+import { DateRange } from "react-day-picker"
 import { BsCurrencyDollar, BsWater } from "react-icons/bs"
 
 import { Financials } from "@/lib/Financials"
@@ -15,6 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "@/components/ui/use-toast"
+import { DatePickerWithRange } from "@/components/date-range-picker"
 import { StockPriceChart } from "@/components/stock-price-chart"
 
 interface TickerPageProps {
@@ -25,11 +28,17 @@ interface TickerPageProps {
 
 export default function TickerPage({ params }: TickerPageProps) {
   const ticker = params?.slug?.join("/")
+
+  const [chartDate, chartSetDate] = useState({
+    from: subDays(new Date(), 30),
+    to: new Date(),
+  })
+
   const {
     chart,
     isLoading: isLoadingChart,
     isError: isErrorChart,
-  } = useChart(ticker)
+  } = useChart(ticker, chartDate.from, chartDate.to)
   const {
     quoteSummary,
     isLoading: isLoadingQuote,
@@ -66,7 +75,7 @@ export default function TickerPage({ params }: TickerPageProps) {
             <h1 className="tracking-tight">
               <span className="mr-3 text-3xl font-bold">
                 {isLoadingQuote ? (
-                  <Skeleton className="h-4 w-10/12" />
+                  <Skeleton className="h-6 w-[250px]" />
                 ) : (
                   financials.shortName
                 )}
@@ -96,7 +105,7 @@ export default function TickerPage({ params }: TickerPageProps) {
                   <CardContent>
                     <div className="text-2xl font-bold">
                       {isLoadingQuote ? (
-                        <Skeleton className="h-4 w-10/12" />
+                        <Skeleton className="h-6 w-10/12" />
                       ) : (
                         formatCurrency(
                           financials.regularMarketPrice,
@@ -117,7 +126,7 @@ export default function TickerPage({ params }: TickerPageProps) {
                   <CardContent>
                     <div className="text-2xl font-bold">
                       {isLoadingQuote ? (
-                        <Skeleton className="h-4 w-10/12" />
+                        <Skeleton className="h-6 w-10/12" />
                       ) : (
                         formatCurrency(financials.open, financials.currency)
                       )}
@@ -134,7 +143,7 @@ export default function TickerPage({ params }: TickerPageProps) {
                   <CardContent>
                     <div className="text-2xl font-bold">
                       {isLoadingQuote ? (
-                        <Skeleton className="h-4 w-10/12" />
+                        <Skeleton className="h-6 w-10/12" />
                       ) : (
                         formatLargeCurrency(
                           financials.marketCap,
@@ -154,7 +163,7 @@ export default function TickerPage({ params }: TickerPageProps) {
                   <CardContent>
                     <div className="text-2xl font-bold">
                       {isLoadingQuote ? (
-                        <Skeleton className="h-4 w-10/12" />
+                        <Skeleton className="h-6 w-10/12" />
                       ) : (
                         formatLargeNumber(financials.volume)
                       )}
@@ -164,14 +173,20 @@ export default function TickerPage({ params }: TickerPageProps) {
               </div>
               <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-1">
                 <Card className="col-span-4">
-                  <CardHeader>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle>Price</CardTitle>
+                    <DatePickerWithRange
+                      date={chartDate}
+                      setDate={chartSetDate}
+                    />
                   </CardHeader>
                   <CardContent className="pl-2">
                     {isLoadingChart ? (
-                      <Skeleton className="h-20 w-full" />
+                      <Skeleton className="ml-3 mr-1 h-20 w-full" />
                     ) : (
-                      <StockPriceChart data={chart} />
+                      <div>
+                        <StockPriceChart data={chart} />
+                      </div>
                     )}
                   </CardContent>
                 </Card>

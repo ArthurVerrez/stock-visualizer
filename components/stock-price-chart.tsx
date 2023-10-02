@@ -10,11 +10,33 @@ import {
 } from "recharts"
 
 import { formatCurrency } from "@/lib/utils"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 import { ScrollArea } from "./ui/scroll-area"
 
 interface StockPriceChartProps {
   data: any
+}
+
+function CardTooltip({ payload, label, active, currency }: any) {
+  if (active) {
+    return (
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <CardTitle className="text-sm font-medium">
+            {new Date(label).toLocaleDateString()}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">
+            {formatCurrency(payload[0].value, currency)}
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  return null
 }
 
 export function StockPriceChart({ data }: StockPriceChartProps) {
@@ -44,11 +66,11 @@ export function StockPriceChart({ data }: StockPriceChartProps) {
           }
         />
         <Tooltip
-          contentStyle={{ background: "black" }}
           formatter={(value: number) =>
             formatCurrency(value, data?.meta?.currency)
           }
           labelFormatter={(date) => new Date(date).toLocaleDateString()}
+          content={<CardTooltip currency={data?.meta?.currency} />}
         />
         <Bar dataKey="close" fill="#8884d8" radius={[4, 4, 0, 0]} />
       </BarChart>

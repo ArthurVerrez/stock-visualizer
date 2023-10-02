@@ -6,6 +6,8 @@ import type { NextRequest } from 'next/server';
 export async function GET(request: NextRequest) {
   try {
     const ticker: string | null = request.nextUrl.searchParams.get('ticker');
+    const periodStart: string | null = request.nextUrl.searchParams.get('periodStart') || '2023-01-01';
+    const periodEnd: string | null = request.nextUrl.searchParams.get('periodEnd') || new Date().toISOString().split('T')[0];
 
     if (!ticker) {
       return NextResponse.json(
@@ -13,7 +15,7 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
-    const queryOptions = { period1: '2023-01-01', /* ... */ };
+    const queryOptions = { period1: periodStart, period2: periodEnd };
     var results = await yahooFinance.chart(ticker, queryOptions);
 
     return NextResponse.json(
