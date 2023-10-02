@@ -173,9 +173,9 @@ export default function TickerPage({ params }: TickerPageProps) {
                   </CardContent>
                 </Card>
               </div>
-              <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-1">
-                <Card className="col-span-4">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div>
+                <Card>
+                  <CardHeader className="items-center justify-between space-y-2 pb-2 md:flex md:flex-row">
                     <CardTitle>Price</CardTitle>
                     <DatePickerWithRange
                       date={chartDate}
