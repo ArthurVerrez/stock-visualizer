@@ -5,7 +5,8 @@ import { fetcher } from "@/lib/utils"
 export const useSearch = (value: string | null) => {
   const { data, error, isLoading } = useSWR(
     value ? `/api/ticker-search?search=${value}` : null,
-    fetcher
+    fetcher,
+    { refreshInterval: 0, revalidateOnFocus: false, revalidateOnReconnect: false }
   )
   return {
     tickers: data,
@@ -17,7 +18,8 @@ export const useSearch = (value: string | null) => {
 export const useHistorical = (ticker: string | null) => {
   const { data, error, isLoading } = useSWR(
     ticker ? `/api/historical?ticker=${ticker}` : null,
-    fetcher
+    fetcher,
+    { refreshInterval: 0, revalidateOnFocus: false, revalidateOnReconnect: false }
   )
   return {
     historical: data,
@@ -37,7 +39,8 @@ export const useChart = (
           dateStart.toISOString().split("T")[0]
         }&periodEnd=${dateEnd.toISOString().split("T")[0]}`
       : null,
-    fetcher
+    fetcher,
+    { refreshInterval: 0, revalidateOnFocus: false, revalidateOnReconnect: false }
   )
   return {
     chart: data,
@@ -49,7 +52,8 @@ export const useChart = (
 export const useQuoteSummary = (ticker: string | null) => {
   const { data, error, isLoading } = useSWR(
     ticker ? `/api/quote-summary?ticker=${ticker}` : null,
-    fetcher
+    fetcher,
+    { refreshInterval: 0, revalidateOnFocus: false, revalidateOnReconnect: false }
   )
   return {
     quoteSummary: data,

@@ -29,7 +29,7 @@ function CardTooltip({ payload, label, active, currency }: any) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            {formatCurrency(payload[0].value, currency)}
+            {payload ? formatCurrency(payload[0].value, currency) : ""}
           </div>
         </CardContent>
       </Card>
