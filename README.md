@@ -15,14 +15,8 @@ With the current rise of LLMs, the ability to correlate pure financial data and 
 ## Technologies
 This project is built using the following technologies:
 - [React](https://reactjs.org/)
-- [Next.js 13](https://nextjs.org/blog/next-13)
+- [Next.js 15](https://nextjs.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Yahoo Finance](https://finance.yahoo.com/)
 - [shadcn-ui](https://github.com/shadcn-ui/ui)
 - Deployed on [Vercel](https://vercel.com/)
-
-## Issues
-
-There currently is an issue with the [yahoo-finance-2](https://github.com/gadicc/node-yahoo-finance2) module that is used to fetch stock data. The issue is that the module is not fully compatible with Next.js 13, for more information you can check out the issue [here](https://github.com/gadicc/node-yahoo-finance2/issues/645).
-
-That explains the *weird* build script in the `package.json` file.

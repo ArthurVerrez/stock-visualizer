@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server"
-import yahooFinance from "yahoo-finance2"
+
+import { yahooFinance } from "@/lib/yahooFinance"
 
 export async function GET(request: NextRequest) {
   try {

@@ -21,13 +21,14 @@ import { DatePickerWithRange } from "@/components/date-range-picker"
 import { StockPriceChart } from "@/components/stock-price-chart"
 
 interface TickerPageProps {
-  params: {
+  params: Promise<{
     slug: string[]
-  }
+  }>
 }
 
 export default function TickerPage({ params }: TickerPageProps) {
-  const ticker = params?.slug?.join("/")
+  const { slug } = React.use(params)
+  const ticker = slug?.join("/")
 
   const [chartDate, chartSetDate] = useState({
     from: subDays(new Date(), 30),
